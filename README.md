@@ -8,13 +8,13 @@ La razón por la cual considero que hay inconsistencias en como se plantea el pr
 problema y con el prototipo realizado en **Figma**, el cual parece tener un enfoque diferente, me explico, en el planteamiento del problema hay un ítem que 
 dicen lo siguiente:
 
-<img src="storage/app/public/psa_image_1.png" width="600">
+<img src="psa_image_1.png" width="600">
 
 Lo cual quiere decir que deben existir dos entidades o tablas en la base de datos de la aplicación Laravel las cuales podrían llamarse `empleados` y `cargos` 
 y que deberían estar relacionadas con una relación de varios a varios, pero si prestamos atención al prototipo de la aplicación hecho en **Figma**, 
 concretamente en el formulario de creación de un nuevo cargo que hay en el CRUD de cargos.
 
-<img src="storage/app/public/psa_image_2.png" width="600">
+<img src="psa_image_2.png" width="600">
 
 En este formulario se le pide al usuario que realice una búsqueda del empleado que quiere asociar al nuevo cargo, sin embargo, ya que la relación que existe entre las dos entidades (`empleados` y `cargos`) es de varios a varios debería brindársele al usuario la opción de asociar al nuevo cargo con más de un empleado, ya que, utilizando este formulario tal cual aparece en el prototipo solo se podrían asociar los nuevos cargos creados con un solo empleado y solo se podrían definir dos empleados con el mismo cargo creando un nuevo cargo con el mismo nombre y las mismas características de uno ya existente.
 
@@ -25,7 +25,7 @@ uno a uno.
 
 Marca unicamente las opciones con las que has trabajado.
 
-<img src="storage/app/public/psa_image_3.png" width="500">
+<img src="psa_image_3.png" width="500">
 
 ### Respuesta.
 
