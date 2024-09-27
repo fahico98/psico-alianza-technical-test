@@ -2,10 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Area;
 use App\Models\Charge;
 use App\Models\Employee;
-use App\Models\Role;
 use Illuminate\Database\Seeder;
 
 class EmployeeSeeder extends Seeder
@@ -17,45 +15,67 @@ class EmployeeSeeder extends Seeder
      */
     public function run()
     {
-        $administrationArea = Area::where('name', '=', 'Administración')
-            ->first();
+        $charges = [
+            'Director creativo',
+            'Project manager',
+            'Asistente legal',
+            'Director comercial',
+            'Mercaderista',
+            'Administrativo',
+            'Community manager',
+            'Diseñador senior',
+            'Diseñador junior',
+            'Desarrollador back-end',
+            'Lider técnico',
+            'Asistente contable'
+        ];
 
-        $presidentCharge = Charge::where('name', '=', 'Presidente')
-            ->first();
+        $areas = [
+            'Marketing y estrategias',
+            'Desarrollo de software',
+            'Legar',
+            'Contabilidad',
+            'Diseño de productos',
+            'Administración',
+            'Comercial',
+            'Consultoría'
+        ];
 
-        $bossRole = Role::where('name', '=', 'Jefe')
-            ->first();
+        $roles = [
+            'Jefe',
+            'Colaborador'
+        ];
 
-        $president = Employee::factory()->make([
-            'area_id' => $administrationArea->id,
-            'charge_id' => $presidentCharge->id,
-            'role_id' => $bossRole->id
+        $presidentCharge = Charge::create([
+            'name' => 'Presidente',
+            'area' => 'Administración',
+            'role' => 'Jefe'
         ]);
+
+        $president = Employee::factory()
+            ->make(['charge_id' => $presidentCharge->id]);
 
         $president->save();
 
         for ($i = 0; $i < self::EMPLOYEES_TO_BE_SEEDED; $i++) {
 
-            $charge = Charge::where('name', '<>', 'Presidente')
-                ->inRandomOrder()
-                ->first();
-
-            $role = Role::inRandomOrder()
-                ->first();
-
-            $area = Area::inRandomOrder()
-                ->first();
-
-            $boss = Employee::where('role_id', '=', $bossRole->id)
-                ->inRandomOrder()
-                ->first();
-
-            $empleado = Employee::factory()->make([
-                'area_id' => $area->id,
-                'charge_id' => $charge->id,
-                'role_id' => $role->id,
-                'boss_id' => $boss->id
+            $charge = Charge::create([
+                'name' => $charges[rand(0, count($charges) - 1)],
+                'area' => $areas[rand(0, count($areas) - 1)],
+                'role' => $roles[rand(0, count($roles) - 1)]
             ]);
+
+            $boss = Employee::whereHas('charge', function($query){
+                    $query->where('role', '=', 'Jefe');
+                })
+                ->inRandomOrder()
+                ->first();
+
+            $empleado = Employee::factory()
+                ->make([
+                    'charge_id' => $charge->id,
+                    'boss_id' => $boss->id
+                ]);
 
             $empleado->save();
         }

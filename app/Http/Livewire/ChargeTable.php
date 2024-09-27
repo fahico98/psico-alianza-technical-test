@@ -15,19 +15,29 @@ class ChargeTable extends DataTableComponent
 
     public function builder(): Builder
     {
-        return Employee::select(['id', 'name', 'lastname'])
-            ->whereNotNull('area_id')
-            ->whereNotNull('charge_id')
-            ->whereNotNull('role_id')
-            ->whereNotNull('boss_id');
+        return Employee::select([
+                'employees.id as id',
+                'employees.name as name',
+                'employees.lastname as lastname',
+                'employees.charge_id as charge_id',
+                'employees.boss_id as boss_id',
+                'employees.updated_at as updated_at'
+            ])
+            ->whereNotNull('boss_id')
+            ->whereHas('boss');
     }
 
     public function configure(): void
     {
         $this->setPrimaryKey('id')
             ->setSingleSortingDisabled()
-            ->setDefaultSort('created_at', 'desc')
+            ->setDefaultSort('updated_at', 'desc')
             ->setColumnSelectDisabled();
+    }
+
+    public function deleteSelected()
+    {
+        return redirect()->route('delete-many-charges-confirmation', ['employees' => $this->getSelected()]);
     }
 
     public function columns(): array
@@ -36,22 +46,28 @@ class ChargeTable extends DataTableComponent
 
             Column::make("Nombre", 'name')
                 ->format(fn($value, $row, Column $column) => $row->name . ' ' . $row->lastname)
-                ->sortable(),
+                ->sortable()
+                ->searchable(),
+
+            Column::make('Apellido', 'lastname')
+                ->hideIf(true)
+                ->searchable(),
 
             Column::make("Identificación", "employee_id")
-                ->sortable(),
+                ->sortable()
+                ->searchable(),
 
-            Column::make("Area", "area_id")
-                ->format(fn($value, $row, Column $column) => $row->area->name)
-                ->sortable(),
+            Column::make("Area", "charge.area")
+                ->sortable()
+                ->searchable(),
 
-            Column::make("Cargo", "charge_id")
-                ->format(fn($value, $row, Column $column) => $row->charge->name)
-                ->sortable(),
+            Column::make("Cargo", "charge.name")
+                ->sortable()
+                ->searchable(),
 
-            Column::make("Rol", "role_id")
-                ->format(fn($value, $row, Column $column) => $row->role->name)
-                ->sortable(),
+            Column::make("Rol", "charge.role")
+                ->sortable()
+                ->searchable(),
 
             Column::make("Jefe", "boss_id")
                 ->format(fn($value, $row, Column $column) => $row->boss->name . ' ' . $row->boss->lastname)
@@ -64,11 +80,11 @@ class ChargeTable extends DataTableComponent
                 ->buttons([
                     LinkColumn::make('Delete')
                         ->title(fn($row) => 'Eliminar')
-                        ->location(fn($row) => route('delete-employee-confirmation', $row->id))
+                        ->location(fn($row) => route('delete-charge-confirmation', $row->charge->id))
                         ->attributes(fn($row) => ['class' => 'text-red-400']),
                     LinkColumn::make('Edit')
                         ->title(fn($row) => 'Editar')
-                        ->location(fn($row) => route('edit-employee-form.blade.php', $row->id)),
+                        ->location(fn($row) => route('edit-charge', $row->charge->id)),
                 ])
         ];
     }

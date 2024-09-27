@@ -22,9 +22,7 @@ class CreateEmployeesTable extends Migration
             $table->string('address');
             $table->string('phone_number');
             $table->string('birthplace');
-            $table->uuid('area_id')->nullable();
             $table->uuid('charge_id')->nullable();
-            $table->uuid('role_id')->nullable();
             $table->uuid('boss_id')->nullable();
             $table->timestamps();
         });

@@ -23,27 +23,9 @@ class Employee extends Model
         'address',
         'phone_number',
         'birthplace',
-        'area_id',
         'charge_id',
-        'role_id',
         'boss_id'
     ];
-
-    /**
-     * Scope a query to include the employee's area.
-     */
-    public function scopeWithArea($query)
-    {
-        return $query->with('area');
-    }
-
-    /**
-     * Scope a query to include the employee's role.
-     */
-    public function scopeWithRole($query)
-    {
-        return $query->with('role');
-    }
 
     /**
      * Scope a query to include the employee's charge.
@@ -59,22 +41,6 @@ class Employee extends Model
     public function scopeWithBoss($query)
     {
         return $query->with('boss');
-    }
-
-    /**
-     * Get the work area that owns the employee.
-     */
-    public function area()
-    {
-        return $this->belongsTo(Area::class);
-    }
-
-    /**
-     * Get the role that owns the employee.
-     */
-    public function role()
-    {
-        return $this->belongsTo(Role::class);
     }
 
     /**

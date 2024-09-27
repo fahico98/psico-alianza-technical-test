@@ -17,6 +17,8 @@ class CreateChargesTable extends Migration
             $table->uuid('id')->unique();
             $table->primary('id');
             $table->string('name');
+            $table->string('area');
+            $table->string('role');
             $table->timestamps();
         });
     }

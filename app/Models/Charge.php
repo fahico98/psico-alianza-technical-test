@@ -17,14 +17,16 @@ class Charge extends Model
      */
     protected $fillable = [
         'name',
-        'updated_at',
+        'area',
+        'role',
+        'updated_at'
     ];
 
     /**
-     * Get the comments for the role.
+     * Get the employee for the charge.
      */
-    public function employees()
+    public function employee()
     {
-        return $this->hasMany(Employee::class);
+        return $this->hasOne(Employee::class);
     }
 }
